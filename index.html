@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Valentine 💖</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+@font-face {
+    font-family: "ILoveWhatYouDo";
+    src: url("i-love-what-you-do.ttf") format("truetype");
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden;
+    background: linear-gradient(180deg, #ffe4ef, #ffffff);
+    font-family: "ILoveWhatYouDo", cursive;
+}
+
+.container {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* CARD */
+.card {
+    background: rgba(255,255,255,0.95);
+    padding: 50px 40px;
+    border-radius: 32px;
+    text-align: center;
+    box-shadow: 0 25px 55px rgba(255, 90, 160, 0.35);
+    width: 92%;
+    max-width: 520px;
+    z-index: 5;
+    animation: cardIn 1s ease forwards;
+}
+
+@keyframes cardIn {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+h1 {
+    color: #ff4f9a;
+    font-size: 30px;
+    line-height: 1.4;
+    margin-bottom: 24px;
+}
+
+/* GLOW NAME */
+.glowName {
+    font-size: 36px;
+    color: #ff2f92;
+    margin-bottom: 10px;
+    animation: glow 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+    from {
+        text-shadow: 0 0 5px #ff99cc, 0 0 10px #ff66b2, 0 0 20px #ff3385;
+    }
+    to {
+        text-shadow: 0 0 15px #ff99cc, 0 0 30px #ff66b2, 0 0 45px #ff3385;
+    }
+}
+
+/* BUTTONS */
+.buttons {
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    gap: 18px;
+    flex-wrap: wrap;
+}
+
+button {
+    padding: 14px 36px;
+    font-size: 20px;
+    border-radius: 40px;
+    border: none;
+    cursor: pointer;
+    font-family: "ILoveWhatYouDo", cursive;
+    transition: all 0.2s ease;
+}
+
+#yesBtn {
+    background: #ff6fae;
+    color: white;
+    box-shadow: 0 12px 30px rgba(255,111,174,0.5);
+}
+
+.vibrate { animation: vibrate 0.15s linear 4; }
+
+@keyframes vibrate {
+    0% { transform: translate(0); }
+    25% { transform: translate(-2px, 2px); }
+    50% { transform: translate(2px, -2px); }
+    75% { transform: translate(-2px, -2px); }
+    100% { transform: translate(0); }
+}
+
+#noBtn {
+    background: white;
+    color: #444;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+
+#result { display: none; }
+#typeText { min-height: 90px; }
+
+#result img {
+    width: 100%;
+    max-width: 280px;
+    margin-top: 20px;
+    border-radius: 22px;
+}
+
+/* HEART BACKGROUND */
+.heart {
+    position: fixed;
+    bottom: -20px;
+    font-size: 22px;
+    animation: floatUp linear forwards;
+    z-index: 0;
+    opacity: 0.7;
+}
+
+@keyframes floatUp {
+    from { transform: translateY(0); }
+    to { transform: translateY(-120vh); }
+}
+</style>
+</head>
+
+<body>
+
+<audio id="song" src="parayuvaan.mp3"></audio>
+
+<div class="container" id="main">
+    <div class="card">
+        <h1>Will you be my Valentine? 💕</h1>
+
+        <div class="buttons">
+            <button id="yesBtn">Yes 💖</button>
+            <button id="noBtn">No 😢</button>
+        </div>
+    </div>
+</div>
+
+<div class="container" id="result">
+    <div class="card">
+        <div class="glowName">Immuz 💖</div>
+        <h1 id="typeText"></h1>
+        <img src="love.gif">
+    </div>
+</div>
+
+<script>
+const noBtn = document.getElementById("noBtn");
+const yesBtn = document.getElementById("yesBtn");
+const main = document.getElementById("main");
+const result = document.getElementById("result");
+const song = document.getElementById("song");
+const typeText = document.getElementById("typeText");
+
+/* NO MESSAGES */
+const messages = [
+    "Are you sure?",
+    "Really sure?",
+    "Think again!",
+    "Last chance!",
+    "Surely not?",
+    "You might regret this!",
+    "Give it another thought!"
+];
+
+let count = 0;
+let yesScale = 1;
+
+noBtn.addEventListener("click", () => {
+    if (count < messages.length) {
+        noBtn.innerText = messages[count];
+        count++;
+
+        const x = Math.random() * 160 - 80;
+        const y = Math.random() * 80 - 40;
+        noBtn.style.transform = `translate(${x}px, ${y}px)`;
+
+        yesScale += 0.08;
+        yesBtn.style.transform = `scale(${yesScale})`;
+        yesBtn.style.boxShadow = `0 0 ${20 + count*5}px #ff6fae`;
+    } else {
+        alert("This button is broken 😜\nPlease use the other one 💖");
+        noBtn.remove();
+    }
+});
+
+/* TYPEWRITER */
+const finalMessage =
+"I don’t want one day of roses.\nI want a lifetime with you.\nSay you’ll be mine—always 💖";
+
+function typeWriter(text, i = 0) {
+    if (i < text.length) {
+        if (text[i] === "\n") typeText.innerHTML += "<br>";
+        else typeText.innerHTML += text[i];
+        setTimeout(() => typeWriter(text, i + 1), 40);
+    }
+}
+
+/* MUSIC FADE */
+function fadeInAudio(audio) {
+    audio.volume = 0;
+    audio.play();
+    const fade = setInterval(() => {
+        if (audio.volume < 0.8) audio.volume += 0.02;
+        else clearInterval(fade);
+    }, 120);
+}
+
+yesBtn.addEventListener("click", () => {
+    yesBtn.classList.add("vibrate");
+    setTimeout(() => yesBtn.classList.remove("vibrate"), 600);
+
+    fadeInAudio(song);
+
+    main.style.display = "none";
+    result.style.display = "flex";
+    typeText.innerHTML = "";
+    typeWriter(finalMessage);
+});
+
+/* FLOATING HEARTS (2 COLORS) */
+setInterval(() => {
+    const h = document.createElement("div");
+    h.className = "heart";
+    h.innerText = Math.random() > 0.5 ? "💗" : "💖";
+    h.style.left = Math.random() * 100 + "vw";
+    h.style.animationDuration = 6 + Math.random() * 5 + "s";
+    document.body.appendChild(h);
+    setTimeout(() => h.remove(), 12000);
+}, 400);
+</script>
+
+</body>
+</html>
